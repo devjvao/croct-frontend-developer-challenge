@@ -1,59 +1,109 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import * as S from './styles'
 
-import { ContentByUploadStateType, uploadState, UploadStateType } from './types'
+import { ContentByUploadStateType, UploadStateType } from './types'
+import UploadArea from '../UploadArea'
+import CircleShapedImage from '../CircleShapedImage'
+import SliderInput from '../SliderInput'
+
+const initialState: {
+  state: UploadStateType
+  file?: File
+  zoom: number
+} = {
+  state: 'WAITING',
+  file: undefined,
+  zoom: 150
+}
 
 const AvatarUpload = () => {
   const [currentState, setCurrentState] = useState<UploadStateType>(
-    uploadState.WAITING as UploadStateType
+    initialState.state
   )
+  const [file, setFile] = useState<File>()
+  const [zoom, setZoom] = useState(initialState.zoom)
 
-  console.log(currentState, setCurrentState)
+  const restart = useCallback(() => {
+    setFile(initialState.file)
+    setZoom(initialState.zoom)
+    setCurrentState('WAITING')
+  }, [])
 
   const contentByState = useMemo(
     () =>
       ({
         WAITING: (
-          <div>
-            <span>
-              <em className="icon icon-image" />
-              Organization Logo
-            </span>
-            <span>Drop the image here or click to browse</span>
-          </div>
+          <UploadArea
+            onSelectValidFile={(file) => {
+              setZoom(initialState.zoom)
+              setFile(file)
+              setCurrentState('CROPPING')
+            }}
+            onSelectInvalidFile={() => setCurrentState('FAILED')}
+          >
+            <S.TitleWrapper>
+              <S.Title>
+                <em className="icon-image" />
+                <span>Organization Logo</span>
+              </S.Title>
+              <S.Subtitle>Drop the image here or click to browse</S.Subtitle>
+            </S.TitleWrapper>
+          </UploadArea>
         ),
         CROPPING: (
-          <div>
-            <div />
-            <div>
-              <span>Crop</span>
-              <div />
-            </div>
-            <button>Save</button>
-          </div>
+          <S.WrapperWithImage>
+            <em className="icon-close" onClick={restart} />
+            <CircleShapedImage zoom={zoom / 100} image={file} />
+            <S.CropSliderWrapper>
+              <S.CropTitle>Crop</S.CropTitle>
+              <SliderInput
+                min={100}
+                max={300}
+                value={zoom}
+                onChange={setZoom}
+              />
+              <S.SaveButton
+                onClick={() => setCurrentState('SAVED_AND_WAITING')}
+              >
+                Save
+              </S.SaveButton>
+            </S.CropSliderWrapper>
+          </S.WrapperWithImage>
         ),
         SAVED_AND_WAITING: (
-          <div>
-            <div />
-            <span>
-              <em className="icon icon-image" />
-              Organization Logo
-            </span>
-            <span>Drop the image here or click to browse</span>
-          </div>
+          <UploadArea
+            onSelectValidFile={(file) => {
+              setZoom(initialState.zoom)
+              setFile(file)
+              setCurrentState('CROPPING')
+            }}
+            onSelectInvalidFile={() => setCurrentState('FAILED')}
+          >
+            <S.WrapperWithImage>
+              <CircleShapedImage image={file} zoom={zoom / 100} />
+              <S.TitleWrapper>
+                <S.Title>
+                  <em className="icon-image" />
+                  <span>Organization Logo</span>
+                </S.Title>
+                <S.Subtitle>Drop the image here or click to browse</S.Subtitle>
+              </S.TitleWrapper>
+            </S.WrapperWithImage>
+          </UploadArea>
         ),
         FAILED: (
-          <div>
+          <S.WrapperWithImage>
+            <em className="icon-close" onClick={restart} />
+            <CircleShapedImage />
             <div>
-              <em className="icon icon-warning" />
+              <S.FeedbackMessage>Sorry, the upload failed.</S.FeedbackMessage>
+              <S.TextLink onClick={restart}>Try again</S.TextLink>
             </div>
-            <span>Sorry, the upload failed.</span>
-            <span>Try again</span>
-          </div>
+          </S.WrapperWithImage>
         )
       } as ContentByUploadStateType),
-    []
+    [file, zoom, restart]
   )
 
   const currentContent = useMemo(
@@ -61,7 +111,7 @@ const AvatarUpload = () => {
     [contentByState, currentState]
   )
 
-  return <S.Wrapper currentState={currentState}>{currentContent}</S.Wrapper>
+  return <S.Container currentState={currentState}>{currentContent}</S.Container>
 }
 
 export default AvatarUpload
