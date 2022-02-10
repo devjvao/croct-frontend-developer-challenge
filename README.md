@@ -41,7 +41,7 @@ $ yarn storybook
 ### Format with Prettier
 
 ```
-$ yarn formaat
+$ yarn format
 ```
 
 ### Lint and Tests
