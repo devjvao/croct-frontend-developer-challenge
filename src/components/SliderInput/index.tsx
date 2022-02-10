@@ -9,6 +9,7 @@ interface Props {
 
 const SliderInput = ({ min, max, value, onChange }: Props) => (
   <S.Slider
+    role="slider"
     type="range"
     min={min}
     max={max}

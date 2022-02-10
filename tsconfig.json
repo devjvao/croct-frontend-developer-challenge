@@ -1,35 +1,30 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ES5",
+    "baseUrl": "src",
+    "target": "es5",
     "lib": [
       "dom",
-      "dom.iterable",
-      "esnext"
+      "dom.iterable"
     ],
-    "baseUrl": "src",
     "allowJs": true,
-    "strict": true,
-    "noEmit": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "strictNullChecks": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": [
-    "node_modules",
-    "build",
-    "src/.storybook"
+    "node_modules"
   ]
 }

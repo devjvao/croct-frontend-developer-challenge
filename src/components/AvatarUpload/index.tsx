@@ -1,11 +1,15 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as S from './styles'
 
 import { ContentByUploadStateType, UploadStateType } from './types'
-import UploadArea from '../UploadArea'
-import CircleShapedImage from '../CircleShapedImage'
-import SliderInput from '../SliderInput'
+import imageUtils from '../../utils/ImageUtils'
+import AvatarUploadWaitingState from '../AvatarUploadWaitingState'
+import AvatarUploadCroppingState from '../AvatarUploadCroppingState'
+import AvatarUploadFailedState from '../AvatarUploadFailedState'
+import AvatarUploadSavedState from '../AvatarUploadSavedState'
+
+const CROP_SIZE = 113
 
 const initialState: {
   state: UploadStateType
@@ -17,12 +21,23 @@ const initialState: {
   zoom: 150
 }
 
-const AvatarUpload = () => {
+interface Props {
+  onSaveAvatar: (base64Data: string) => void
+}
+
+const AvatarUpload = ({ onSaveAvatar }: Props) => {
   const [currentState, setCurrentState] = useState<UploadStateType>(
     initialState.state
   )
   const [file, setFile] = useState<File>()
   const [zoom, setZoom] = useState(initialState.zoom)
+
+  useEffect(() => {
+    if (currentState === 'FAILED') {
+      setFile(initialState.file)
+      setZoom(initialState.zoom)
+    }
+  }, [currentState])
 
   const restart = useCallback(() => {
     setFile(initialState.file)
@@ -30,80 +45,82 @@ const AvatarUpload = () => {
     setCurrentState('WAITING')
   }, [])
 
+  const waitingComponent = useMemo(
+    () => (
+      <AvatarUploadWaitingState
+        onSelectValidFile={(file) => {
+          setZoom(initialState.zoom)
+          setFile(file)
+          setCurrentState('CROPPING')
+        }}
+        onSelectInvalidFile={() => setCurrentState('FAILED')}
+      />
+    ),
+    []
+  )
+
+  const croppingComponent = useMemo(
+    () => (
+      <AvatarUploadCroppingState
+        file={file}
+        zoom={zoom}
+        setZoom={setZoom}
+        onRestart={restart}
+        onSaveCrop={() => {
+          if (file) {
+            imageUtils
+              .cropRoundImage(file, CROP_SIZE, zoom / 100)
+              .then((base64Data) => {
+                onSaveAvatar(base64Data)
+                setCurrentState('SAVED')
+              })
+              .catch(() => {
+                setCurrentState('FAILED')
+              })
+          } else {
+            setCurrentState('FAILED')
+          }
+        }}
+      />
+    ),
+    [file, zoom, restart, onSaveAvatar]
+  )
+
+  const savedAndWaitingComponent = useMemo(
+    () => (
+      <AvatarUploadSavedState
+        file={file}
+        zoom={zoom}
+        onSelectValidFile={(file) => {
+          setZoom(initialState.zoom)
+          setFile(file)
+          setCurrentState('CROPPING')
+        }}
+        onSelectInvalidFile={() => setCurrentState('FAILED')}
+      />
+    ),
+    [file, zoom]
+  )
+
+  const failedComponent = useMemo(
+    () => <AvatarUploadFailedState onRestart={restart} />,
+    [restart]
+  )
+
   const contentByState = useMemo(
     () =>
       ({
-        WAITING: (
-          <UploadArea
-            onSelectValidFile={(file) => {
-              setZoom(initialState.zoom)
-              setFile(file)
-              setCurrentState('CROPPING')
-            }}
-            onSelectInvalidFile={() => setCurrentState('FAILED')}
-          >
-            <S.TitleWrapper>
-              <S.Title>
-                <em className="icon-image" />
-                <span>Organization Logo</span>
-              </S.Title>
-              <S.Subtitle>Drop the image here or click to browse</S.Subtitle>
-            </S.TitleWrapper>
-          </UploadArea>
-        ),
-        CROPPING: (
-          <S.WrapperWithImage>
-            <em className="icon-close" onClick={restart} />
-            <CircleShapedImage zoom={zoom / 100} image={file} />
-            <S.CropSliderWrapper>
-              <S.CropTitle>Crop</S.CropTitle>
-              <SliderInput
-                min={100}
-                max={300}
-                value={zoom}
-                onChange={setZoom}
-              />
-              <S.SaveButton
-                onClick={() => setCurrentState('SAVED_AND_WAITING')}
-              >
-                Save
-              </S.SaveButton>
-            </S.CropSliderWrapper>
-          </S.WrapperWithImage>
-        ),
-        SAVED_AND_WAITING: (
-          <UploadArea
-            onSelectValidFile={(file) => {
-              setZoom(initialState.zoom)
-              setFile(file)
-              setCurrentState('CROPPING')
-            }}
-            onSelectInvalidFile={() => setCurrentState('FAILED')}
-          >
-            <S.WrapperWithImage>
-              <CircleShapedImage image={file} zoom={zoom / 100} />
-              <S.TitleWrapper>
-                <S.Title>
-                  <em className="icon-image" />
-                  <span>Organization Logo</span>
-                </S.Title>
-                <S.Subtitle>Drop the image here or click to browse</S.Subtitle>
-              </S.TitleWrapper>
-            </S.WrapperWithImage>
-          </UploadArea>
-        ),
-        FAILED: (
-          <S.WrapperWithImage>
-            <em className="icon-close" onClick={restart} />
-            <CircleShapedImage />
-            <div>
-              <S.FeedbackMessage>Sorry, the upload failed.</S.FeedbackMessage>
-              <S.TextLink onClick={restart}>Try again</S.TextLink>
-            </div>
-          </S.WrapperWithImage>
-        )
+        WAITING: waitingComponent,
+        CROPPING: croppingComponent,
+        SAVED: savedAndWaitingComponent,
+        FAILED: failedComponent
       } as ContentByUploadStateType),
-    [file, zoom, restart]
+    [
+      waitingComponent,
+      croppingComponent,
+      savedAndWaitingComponent,
+      failedComponent
+    ]
   )
 
   const currentContent = useMemo(

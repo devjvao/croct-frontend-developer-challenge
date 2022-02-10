@@ -11,12 +11,14 @@ import * as S from './styles'
 import imageUtils from '../../utils/ImageUtils'
 
 interface Props {
+  role?: string
   children: ReactNode
   onSelectValidFile: (file: File) => void
   onSelectInvalidFile: () => void
 }
 
 const UploadArea = ({
+  role,
   children,
   onSelectValidFile,
   onSelectInvalidFile
@@ -49,12 +51,13 @@ const UploadArea = ({
 
   return (
     <S.DropZone
+      role={role}
       onDrop={onDrop}
       onDragOver={preventDefault}
       onDragEnter={preventDefault}
       onDragLeave={preventDefault}
     >
-      <S.FileInput type="file" onChange={onSelect} />
+      <S.FileInput role="file-input" type="file" onChange={onSelect} />
       {children}
     </S.DropZone>
   )

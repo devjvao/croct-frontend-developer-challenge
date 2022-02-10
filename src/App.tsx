@@ -6,7 +6,7 @@ import AvatarUpload from './components/AvatarUpload'
 const App = () => (
   <>
     <GlobalStyles />
-    <AvatarUpload />
+    <AvatarUpload onSaveAvatar={console.log} />
   </>
 )
 

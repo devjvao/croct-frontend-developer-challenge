@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 interface CircleShapeProps {
-  zoom?: number
+  scale?: number
 }
 
 export const CircleShapeWrapper = styled.div`
@@ -27,7 +27,7 @@ export const CircleShapeWrapper = styled.div`
 
 export const CircleShape = styled.div.attrs<CircleShapeProps>((props) => ({
   style: {
-    transform: `scale(${props.zoom})`
+    transform: `scale(${props.scale})`
   }
 }))<CircleShapeProps>`
   width: 100%;

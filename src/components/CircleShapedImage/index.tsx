@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from 'react'
 import * as S from './styles'
 
 interface Props {
-  zoom?: number
+  scale?: number
   image?: File
+  renderKey?: string
 }
 
-const CircleShapedImage = ({ zoom, image }: Props) => {
+const CircleShapedImage = ({ renderKey, scale, image }: Props) => {
   const circleShapeRef = useRef<HTMLDivElement>(null)
   const [invalid, setInvalid] = useState(false)
 
@@ -28,9 +29,9 @@ const CircleShapedImage = ({ zoom, image }: Props) => {
   }, [image])
 
   return (
-    <S.CircleShapeWrapper>
-      <S.CircleShape ref={circleShapeRef} zoom={zoom} />
-      {invalid && <em className="icon-warning" />}
+    <S.CircleShapeWrapper key={renderKey}>
+      <S.CircleShape role="circle-image" ref={circleShapeRef} scale={scale} />
+      {invalid && <em role="invalid-image" className="icon-warning" />}
     </S.CircleShapeWrapper>
   )
 }

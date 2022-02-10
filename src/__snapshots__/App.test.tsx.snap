@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should render the app 1`] = `
+.c0 {
+  width: 55.3rem;
+  height: 17.7rem;
+  background-color: #f2f5f8;
+  border-radius: 0.8rem;
+  border: 0.2rem dashed #c7cdd3;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  -webkit-flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
+  font-size: 1.4rem;
+  line-height: 180%;
+}
+
+.c4 {
+  display: grid;
+  grid-gap: 1.2rem;
+  grid-template-columns: auto 1fr;
+  place-items: center;
+  font-weight: 500;
+  color: #495567;
+}
+
+.c5 {
+  font-weight: normal;
+  color: #677489;
+}
+
+.c1 {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.c2 {
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+<div>
+  <div
+    class="c0"
+  >
+    <div
+      class="c1"
+      role="waiting-state"
+    >
+      <input
+        class="c2"
+        role="file-input"
+        type="file"
+      />
+      <div
+        class="c3"
+      >
+        <div
+          class="c4"
+        >
+          <em
+            class="icon-image"
+          />
+          <span
+            role="title"
+          >
+            Organization Logo
+          </span>
+        </div>
+        <span
+          class="c5"
+          role="subtitle"
+        >
+          Drop the image here or click to browse
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -19,6 +19,8 @@ export const Slider = styled.input`
   background: ${({ min, max, value }: SliderProps) =>
     getLinearGradientCss(((value - min) / (max - min)) * 100)};
 
+  &::-ms-thumb,
+  &::-moz-range-thumb,
   &::-webkit-slider-thumb {
     border: none;
     width: 1.2rem;

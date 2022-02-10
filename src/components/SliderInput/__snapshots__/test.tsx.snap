@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SliderInput /> should render the slider 1`] = `
+.c0 {
+  border-radius: 0.1rem;
+  height: 0.2rem;
+  width: 100%;
+  margin: 1.5rem 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right,#3f80ff 0%,#3f80ff 50%,#b9d1ff 50%,#b9d1ff 100%);
+}
+
+.c0::-ms-thumb,
+.c0::-moz-range-thumb,
+.c0::-webkit-slider-thumb {
+  border: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: #3f80ff;
+  border-radius: 50%;
+}
+
+<input
+  class="c0"
+  max="300"
+  min="100"
+  role="slider"
+  type="range"
+  value="200"
+/>
+`;

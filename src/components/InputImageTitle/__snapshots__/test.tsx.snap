@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InputImageTitle /> should render the subtitle 1`] = `
+.c0 {
+  font-weight: normal;
+  color: #677489;
+}
+
+<span
+  class="c0"
+  role="subtitle"
+>
+  Drop the image here or click to browse
+</span>
+`;
+
+exports[`<InputImageTitle /> should render the title 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  -webkit-flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
+  font-size: 1.4rem;
+  line-height: 180%;
+}
+
+.c1 {
+  display: grid;
+  grid-gap: 1.2rem;
+  grid-template-columns: auto 1fr;
+  place-items: center;
+  font-weight: 500;
+  color: #495567;
+}
+
+.c2 {
+  font-weight: normal;
+  color: #677489;
+}
+
+<div
+  class="c0"
+>
+  <div
+    class="c1"
+  >
+    <em
+      class="icon-image"
+    />
+    <span
+      role="title"
+    >
+      Organization Logo
+    </span>
+  </div>
+  <span
+    class="c2"
+    role="subtitle"
+  >
+    Drop the image here or click to browse
+  </span>
+</div>
+`;
